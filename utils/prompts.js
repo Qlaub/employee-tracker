@@ -1,6 +1,8 @@
 const inquirer = require('inquirer');
 const {
-  getAllDepartments
+  getAllDepartments,
+  getAllRoles,
+  getAllEmployees
 } = require('./queries');
 
 function optionsPrompt() {
@@ -77,8 +79,24 @@ async function addRolePrompt() {
   ]);
 };
 
-function addEmployeePrompt() {
-  return inquirer.prompt([
+async function addEmployeePrompt() {
+  // get all current roles in the database
+  const roles = await getAllRoles();
+
+  // iterate over results and push to an array
+  let rolesArr = []
+  roles[0].forEach(role => {
+    rolesArr.push(role.title);
+  });
+
+  const employees = await getAllEmployees();
+
+  let employeesArr = ['None'];
+  employees[0].forEach(employee => {
+    employeesArr.push(`${employee.first_name} ${employee.last_name}`);
+  });
+
+  return await inquirer.prompt([
     {
       type: 'input',
       name: 'employeeFirstName',
@@ -106,30 +124,16 @@ function addEmployeePrompt() {
       }
     },
     {
-      type: 'input',
+      type: 'list',
       name: 'employeeRole',
       message: "What is the employee's role?",
-      validate: employeeRoleInput => {
-        if (employeeRoleInput) {
-          return true;
-        } else {
-          console.log('Please enter the role of the employee');
-          return false;
-        }
-      }
+      choices: rolesArr
     },
     {
-      type: 'input',
+      type: 'list',
       name: 'employeeManager',
       message: "Who is the employee's manager?",
-      validate: employeeManagerInput => {
-        if (employeeManagerInput) {
-          return true;
-        } else {
-          console.log('Please enter the manager of the employee');
-          return false;
-        }
-      }
+      choices: employeesArr
     }
   ]);
 };

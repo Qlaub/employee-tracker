@@ -36,7 +36,7 @@ function newDepartment(department) {
 function getDepartmentId(name) {
   const sql = `SELECT departments.id
     FROM departments
-    WHERE departments.name = ?`
+    WHERE departments.name = ?`;
   const params = [name];
   return db.query(sql, params);
 };
@@ -48,11 +48,34 @@ function newRole(title, salary, departmentId) {
   return db.query(sql, params);
 };
 
-function newEmployee(firstName, lastName, roleId, managerId) {
-  const sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
-    VALUES (?, ?, ?, ?)`;
-  const params = [firstName, lastName, roleId, managerId];
+function getRoleId(title) {
+  const sql = `SELECT roles.id
+    FROM roles
+    WHERE roles.title = ?`;
+  const params = [title];
   return db.query(sql, params);
+};
+
+function getEmployeeId(name) {
+  const sql = `SELECT employees.id
+    FROM employees
+    WHERE CONCAT(employees.first_name, ' ', employees.last_name) = ?`;
+  const params = [name];
+  return db.query(sql, params);
+};
+
+function newEmployee(firstName, lastName, roleId, managerId) {
+  if (!managerId) {
+    const sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
+      VALUES (?, ?, ?)`;
+    const params = [firstName, lastName, roleId];
+    return db.query(sql, params);
+  } else {
+    const sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
+      VALUES (?, ?, ?, ?)`;
+    const params = [firstName, lastName, roleId, managerId];
+    return db.query(sql, params);
+  }
 };
 
 module.exports = {
@@ -61,5 +84,8 @@ module.exports = {
   getAllEmployees,
   newDepartment,
   getDepartmentId,
-  newRole
+  newRole,
+  getRoleId,
+  getEmployeeId,
+  newEmployee
 };

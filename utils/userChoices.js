@@ -12,7 +12,10 @@ const  {
   getAllEmployees,
   newDepartment,
   getDepartmentId,
-  newRole
+  newRole,
+  getRoleId,
+  getEmployeeId,
+  newEmployee
 } = require('./queries');
 
 async function init() {
@@ -52,8 +55,6 @@ async function init() {
 async function viewDepartments() {
   // info from database
   const info = await getAllDepartments();
-
-  console.log(info[0]);
 
   // populate values with id and names from database
   let values = []
@@ -115,8 +116,23 @@ async function addRole() {
 
 async function addEmployee() {
   const choice = await addEmployeePrompt();
-  console.log(choice);
-  // do something
+
+  // query db for id associated with role
+  let roleId = await getRoleId(choice.employeeRole);
+  roleId = roleId[0][0].id;
+
+  // query db for id associated with manager
+  let managerId;
+  if (choice.employeeManager === 'None') {
+    managerId = false;
+  } else {
+    managerId = await getEmployeeId(choice.employeeManager);
+    managerId = managerId[0][0].id;
+  }
+
+  await newEmployee(choice.employeeFirstName, choice.employeeLastName, roleId, managerId)
+
+  console.log(`Added ${choice.employeeFirstName} ${choice.employeeLastName} to the database`);
 };
 
 async function updateEmployeeRole() {
