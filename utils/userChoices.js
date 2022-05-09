@@ -5,13 +5,15 @@ const {
   addEmployeePrompt,
   updateRolePrompt
 } = require('./prompts');
+require('console.table');
+const getAllDepartments = require('./queries');
 
 async function init() {
   const userChoice = await optionsPrompt();
 
   switch (userChoice.choice) {
     case 'View all departments':
-      viewDepartments();
+      await viewDepartments();
       break;
     case 'View all roles':
       viewRoles();
@@ -40,9 +42,19 @@ async function init() {
   return init();
 }
 
-function viewDepartments() {
-  console.log('departments chosen');
-  // do something
+async function viewDepartments() {
+  // info from database
+  const info = await getAllDepartments();
+
+  // populate values with id and names from database
+  let values = []
+  info[0].forEach(object => {
+    values.push([object.id, object.name])
+  })
+
+  console.table(['ID', 'Name'], values);
+
+  return;
 };
 
 function viewRoles() {
