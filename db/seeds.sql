@@ -7,19 +7,19 @@ VALUES
 
 INSERT INTO roles (title, salary, department_id)
 VALUES
-  ('Sales consultant', 25.28, 1),
-  ('Sales representative', 27.07, 1),
-  ('Sales manager', 30.12, 1),
-  ('Marketing analyst', 32.15, 2),
-  ('Marketing specialist', 34.16, 2),
-  ('Marketing consultant', 29.16, 2),
-  ('Account broker', 35.19, 3),
-  ('Payroll clerk', 25.12, 3),
-  ('Payroll manager', 34.15, 3),
-  ('Budget analyst', 33.19, 3),
-  ('Director of recruiting', 39.15, 4),
-  ('Benefits manager', 33.17, 4),
-  ('Recruiter', 25.19, 4);
+  ('Sales consultant', 100000, 1),
+  ('Sales representative', 110000, 1),
+  ('Sales manager', 120000, 1),
+  ('Marketing analyst', 135000, 2),
+  ('Marketing specialist', 136000, 2),
+  ('Marketing consultant', 140000, 2),
+  ('Account broker', 115000, 3),
+  ('Payroll clerk', 120000, 3),
+  ('Payroll manager', 140000, 3),
+  ('Budget analyst', 132000, 3),
+  ('Director of recruiting', 145000, 4),
+  ('Benefits manager', 132000, 4),
+  ('Recruiter', 99000, 4);
 
 INSERT INTO employees (first_name, last_name, role_id, manager_id)
 VALUES

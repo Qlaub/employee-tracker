@@ -6,7 +6,11 @@ const {
   updateRolePrompt
 } = require('./prompts');
 require('console.table');
-const getAllDepartments = require('./queries');
+const  {
+  getAllDepartments,
+  getAllRoles,
+  getAllEmployees
+} = require('./queries');
 
 async function init() {
   const userChoice = await optionsPrompt();
@@ -16,10 +20,10 @@ async function init() {
       await viewDepartments();
       break;
     case 'View all roles':
-      viewRoles();
+      await viewRoles();
       break;
     case 'View all employees':
-      viewEmployees();
+      await viewEmployees();
       break;
     case 'Add a department':
       await addDepartment();
@@ -48,23 +52,40 @@ async function viewDepartments() {
 
   // populate values with id and names from database
   let values = []
-  info[0].forEach(object => {
-    values.push([object.id, object.name])
-  })
+  info[0].forEach(column => {
+    values.push([column.id, column.name]);
+  });
 
+  // format table output with column names and values
   console.table(['ID', 'Name'], values);
 
   return;
 };
 
-function viewRoles() {
-  console.log('view roles chosen');
-  // do something
+async function viewRoles() {
+  const info = await getAllRoles();
+
+  let values = []
+  info[0].forEach(column => {
+    values.push([column.id, column.title, column.salary, column.name]);
+  });
+
+  console.table(['ID', 'Title', 'Salary', 'Department'], values);
+
+  return;
 };
 
-function viewEmployees() {
-  console.log('view employees chosen');
-  // do something
+async function viewEmployees() {
+  const info = await getAllEmployees();
+
+  let values = []
+  info[0].forEach(column => {
+    values.push([column.id, column.first_name, column.last_name, column.title, column.department, column.manager])
+  });
+
+  console.table(['ID', 'First Name', 'Last Name', 'Title', 'Department', 'Manager'], values);
+
+  return;
 };
 
 async function addDepartment() {
