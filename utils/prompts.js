@@ -1,4 +1,7 @@
 const inquirer = require('inquirer');
+const {
+  getAllDepartments
+} = require('./queries');
 
 function optionsPrompt() {
   return inquirer.prompt([
@@ -29,8 +32,16 @@ function addDepartmentPrompt() {
   ]);
 };
 
-function addRolePrompt() {
-  return inquirer.prompt([
+async function addRolePrompt() {
+  // get all current departments in the database
+  const departments = await getAllDepartments();
+
+  // iterate over results and push to an array
+  let departmentArr = []
+  departments[0].forEach(department => {
+    departmentArr.push(department.name);
+  });
+  return await inquirer.prompt([
     {
       type: 'input',
       name: 'roleName',
@@ -58,17 +69,10 @@ function addRolePrompt() {
       }
     },
     {
-      type: 'input',
+      type: 'list',
       name: 'roleDepartment',
       message: 'Which department does the role belong to?',
-      validate: roleDepartmentInput => {
-        if (roleDepartmentInput) {
-          return true;
-        } else {
-          console.log('Please enter the department the role belongs to');
-          return false;
-        }
-      }
+      choices: departmentArr
     }
   ]);
 };

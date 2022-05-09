@@ -26,14 +26,40 @@ function getAllEmployees() {
   return db.query(sql);
 };
 
-function addDepartment(department) {
+function newDepartment(department) {
   const sql = `INSERT INTO departments (name)
     VALUES (?)`;
+  const params = [department];
+  return db.query(sql, params);
+};
 
-}
+function getDepartmentId(name) {
+  const sql = `SELECT departments.id
+    FROM departments
+    WHERE departments.name = ?`
+  const params = [name];
+  return db.query(sql, params);
+};
+
+function newRole(title, salary, departmentId) {
+  const sql = `INSERT INTO roles (title, salary, department_id)
+    VALUES (?, ?, ?)`;
+  const params = [title, salary, departmentId];
+  return db.query(sql, params);
+};
+
+function newEmployee(firstName, lastName, roleId, managerId) {
+  const sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
+    VALUES (?, ?, ?, ?)`;
+  const params = [firstName, lastName, roleId, managerId];
+  return db.query(sql, params);
+};
 
 module.exports = {
   getAllDepartments,
   getAllRoles,
-  getAllEmployees
+  getAllEmployees,
+  newDepartment,
+  getDepartmentId,
+  newRole
 };
