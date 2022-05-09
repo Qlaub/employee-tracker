@@ -36,7 +36,7 @@ async function init() {
     // default option is to exit program
     default:
       console.log('Goodbye!');
-      return;
+      return process.exit();
   };
 
   return init();
