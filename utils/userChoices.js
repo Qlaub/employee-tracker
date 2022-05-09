@@ -15,7 +15,8 @@ const  {
   newRole,
   getRoleId,
   getEmployeeId,
-  newEmployee
+  newEmployee,
+  updateRole
 } = require('./queries');
 
 async function init() {
@@ -98,6 +99,8 @@ async function addDepartment() {
   const choice = await addDepartmentPrompt();
   await newDepartment(choice.department);
   console.log(`Added ${choice.department} to the database`);
+
+  return;
 };
 
 async function addRole() {
@@ -112,6 +115,8 @@ async function addRole() {
   await newRole(choice.roleName, choice.roleSalary, id);
 
   console.log(`Added ${choice.roleName} to the database`);
+
+  return;
 };
 
 async function addEmployee() {
@@ -133,12 +138,23 @@ async function addEmployee() {
   await newEmployee(choice.employeeFirstName, choice.employeeLastName, roleId, managerId)
 
   console.log(`Added ${choice.employeeFirstName} ${choice.employeeLastName} to the database`);
+
+  return;
 };
 
 async function updateEmployeeRole() {
   const choice = await updateRolePrompt();
-  console.log(choice);
-  // do something
+
+  let employeeId = await getEmployeeId(choice.employee);
+  employeeId = employeeId[0][0].id;
+  let roleId = await getRoleId(choice.employeeRole);
+  roleId = roleId[0][0].id;
+
+  await updateRole(roleId, employeeId);
+
+  console.log(`Updated the role of ${choice.employee}`);
+
+  return;
 };
 
 module.exports = init;

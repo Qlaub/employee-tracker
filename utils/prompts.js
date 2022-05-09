@@ -138,13 +138,33 @@ async function addEmployeePrompt() {
   ]);
 };
 
-function updateRolePrompt() {
-  return inquirer.prompt([
+async function updateRolePrompt() {
+  const employees = await getAllEmployees();
+
+  let employeesArr = [];
+  employees[0].forEach(employee => {
+    employeesArr.push(`${employee.first_name} ${employee.last_name}`);
+  });
+
+  const roles = await getAllRoles();
+
+  let rolesArr = []
+  roles[0].forEach(role => {
+    rolesArr.push(role.title);
+  });
+
+  return await inquirer.prompt([
+    {
+      type: 'list',
+      name: 'employee',
+      message: "Which employee's role do you want to update?",
+      choices: employeesArr
+    },
     {
       type: 'list',
       name: 'employeeRole',
-      message: "Which employee's role do you want to update?",
-      choices: [''] // EMPLOYEE TABLE FIRST NAME AND LAST NAME LIST DB QUERY
+      message: "What is their new role?",
+      choices: rolesArr
     }
   ]);
 };

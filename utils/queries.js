@@ -78,6 +78,12 @@ function newEmployee(firstName, lastName, roleId, managerId) {
   }
 };
 
+function updateRole(roleId, employeeId) {
+  const sql = `UPDATE employees SET role_id = ? WHERE id = ?`;
+  const params = [roleId, employeeId];
+  return db.query(sql, params);
+}
+
 module.exports = {
   getAllDepartments,
   getAllRoles,
@@ -87,5 +93,6 @@ module.exports = {
   newRole,
   getRoleId,
   getEmployeeId,
-  newEmployee
+  newEmployee,
+  updateRole
 };
